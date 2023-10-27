@@ -2,7 +2,7 @@ package lab4;
 
 public class Fork{
     /* Class represents fork */
-    private boolean isTaken;
+    public boolean isTaken;
     private int ID;
 
     public Fork(int ID) {
@@ -21,8 +21,9 @@ public class Fork{
         return isTaken;
     }
 
-    public void take() {
+    public boolean take() {
         isTaken = true;
+        return false;
     }
 
     public void release() {
