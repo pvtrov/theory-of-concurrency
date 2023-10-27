@@ -1,11 +1,10 @@
-package lab4;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-class LockedFork extends Fork{
+class LockedFork extends Fork {
     private int ID;
     private ReentrantLock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
@@ -61,7 +60,7 @@ class ControllingArbitrator{
     }
 }
 
-class ControlledPhilosopher extends Philosopher{
+class ControlledPhilosopher extends Philosopher {
     private ControllingArbitrator arbitrator;
 
     public ControlledPhilosopher(int ID, Fork leftFork, Fork rightFork, ControllingArbitrator arbitrator) {

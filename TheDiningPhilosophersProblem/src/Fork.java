@@ -1,5 +1,3 @@
-package lab4;
-
 public class Fork{
     /* Class represents fork */
     public boolean isTaken;

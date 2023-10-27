@@ -1,11 +1,9 @@
-package lab4;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 
-class NaivePhilosopher extends Philosopher{
+class NaivePhilosopher extends Philosopher {
     public NaivePhilosopher(int ID, Fork leftFork, Fork rightFork) {
         super(ID, leftFork, rightFork);
     }

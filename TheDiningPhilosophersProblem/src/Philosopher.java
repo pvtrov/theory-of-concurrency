@@ -1,5 +1,3 @@
-package lab4;
-
 public class Philosopher extends Thread{
     /* Class represents philosopher */
     private int ID;
