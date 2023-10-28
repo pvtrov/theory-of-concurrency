@@ -9,7 +9,19 @@ class ExtinctionPhilosopher extends Philosopher {
 
     @Override
     public void run(){
-        // TODO: Implement me
+        while(566 > 0){
+            synchronized (getLeftFork()) {
+                synchronized (getRightFork()){
+                takeLeftFork();
+                takeRightFork();
+                System.out.println("Jestem filozofem numer " + getID() + " i mam oba widelce");
+                System.out.println("Jestem filozofem numer " + getID() + " i jem");
+                }
+            }
+            releaseLeftFork();
+            releaseRightFork();
+            System.out.println("Jestem filozofem numer " + getID() + " i skonczylem jesc");
+        }
     }
 }
 

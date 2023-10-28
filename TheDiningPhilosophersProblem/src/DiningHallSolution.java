@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -48,31 +49,43 @@ class DiningHallPhilosopher extends Philosopher {
     }
 
     public void run(){
-        while(566 > 0){
+        while(566 > should_running){
+            startWaiting = System.nanoTime();
             if (arbitrator.requestEat()){
                 takeRightFork();
                 takeLeftFork();
+                getBothForksTime = System.nanoTime();
+                getTimerAndCounter().addBothForksTime(getBothForksTime-startWaiting);
+                getTimerAndCounter().addOneForksTime(getBothForksTime-startWaiting);
                 System.out.println("Jestem filozofem numer " + getID() + " i jem w jadalni");
+                getTimerAndCounter().philosopherAte();
                 releaseLeftFork();
                 releaseRightFork();
                 arbitrator.doneEating();
+                startWaiting = System.nanoTime();
             } else if (arbitrator.requestCorridor()){
                 takeLeftFork();
                 takeRightFork();
+                getBothForksTime = System.nanoTime();
+                getTimerAndCounter().addBothForksTime(getBothForksTime-startWaiting);
+                getTimerAndCounter().addOneForksTime(getBothForksTime-startWaiting);
                 System.out.println("Jestem filozofem numer " + getID() + " i jem w korytarzu");
+                getTimerAndCounter().philosopherAte();
                 releaseLeftFork();
                 releaseRightFork();
                 arbitrator.doneCorridor();
+                startWaiting = System.nanoTime();
             }
         }
     }
 }
 
 public class DiningHallSolution {
-    public static void main(String[] args) {
-        int n = 15;
-        List<LockedFork> forks = new ArrayList<>();
-        List<DiningHallPhilosopher> philosophers = new ArrayList<>();
+    private void runExperiments(int n){
+        List<Fork> forks = new ArrayList<>();
+        List<Philosopher> philosophers = new ArrayList<>();
+        CsvWriter csvWriter = new CsvWriter();
+
         for (int i = 0; i < n; i++) {
             forks.add(new LockedFork(i));
         }
@@ -83,6 +96,28 @@ public class DiningHallSolution {
             philosophers.add(new DiningHallPhilosopher(i, left, right, arbitrator));
             philosophers.get(i).start();
         }
+        TimeMonitor timeMonitor = new TimeMonitor(1000, philosophers);
+        timeMonitor.start();
+
+        for (Philosopher philosopher : philosophers) {
+            try {
+                philosopher.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ResultObliczacz obliczacz = new ResultObliczacz(philosophers);
+        obliczacz.getResult(csvWriter, "dining_hall_data.csv");
+    }
+
+    public static void main(String[] args) {
+        DiningHallSolution solution = new DiningHallSolution();
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20);
+        for (Integer num : numOfPhilosophers){
+            solution.runExperiments(num);
+        }
+        System.exit(0);
     }
 }
 

@@ -1,8 +1,13 @@
 public class Philosopher extends Thread{
     /* Class represents philosopher */
+    Long startWaiting;
+    Long getBothForksTime;
+    Long getFirstForkTime;
     private int ID;
     private Fork leftFork;
     private Fork rightFork;
+    private TimerAndCounter timerAndCounter = new TimerAndCounter();
+    public int should_running = 0;
 
     public Philosopher(int ID, Fork leftFork, Fork rightFork) {
         this.ID = ID;
@@ -36,6 +41,10 @@ public class Philosopher extends Thread{
 
     public void releaseRightFork() {
         rightFork.release();
+    }
+
+    public TimerAndCounter getTimerAndCounter(){
+        return timerAndCounter;
     }
 
     public void run(){}
