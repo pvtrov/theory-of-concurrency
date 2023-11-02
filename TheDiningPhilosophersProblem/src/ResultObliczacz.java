@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ public class ResultObliczacz {
     private List<Double> averageWaitingTimePerPhilosopherOneForks = new ArrayList<>();
     private List<Double> averageWaitingTimes = new ArrayList<>();
     private List<Integer> eatingPerPhilosopher = new ArrayList<>();
+    DecimalFormat df = new DecimalFormat("#.####");
     List<List<? extends Number>> data = new ArrayList<>();
 
     public ResultObliczacz(List<Philosopher> philosophers){
@@ -16,21 +18,23 @@ public class ResultObliczacz {
     public void countAverageWaitingTimePerPhilosopher() {
         for (Philosopher philosopher : philosophers){
             TimerAndCounter counter = philosopher.getTimerAndCounter();
-            List<Long> oneForksTime = counter.getOneForkList();
+            List<Double> oneForksTime = counter.getOneForkList();
             long sum = 0;
-            for (Long oneTime : oneForksTime){
+            for (Double oneTime : oneForksTime){
                 sum += oneTime;
             }
             double average = (double) sum / oneForksTime.size();
-            averageWaitingTimePerPhilosopherOneForks.add(average);
+            String formattedTime = df.format(average);
+            averageWaitingTimePerPhilosopherOneForks.add(Double.parseDouble(formattedTime.replace(',', '.')));
 
-            List<Long> bothForksTime = counter.getBothForkList();
+            List<Double> bothForksTime = counter.getBothForkList();
             sum = 0;
-            for (Long bothTime : bothForksTime){
+            for (Double bothTime : bothForksTime){
                 sum += bothTime;
             }
             average = (double) sum / bothForksTime.size();
-            averageWaitingTimePerPhilosopherBothForks.add(average);
+            String formattedTime2 = df.format(average);
+            averageWaitingTimePerPhilosopherBothForks.add(Double.parseDouble(formattedTime2.replace(',', '.')));
         }
     }
 
@@ -39,14 +43,14 @@ public class ResultObliczacz {
         for (double time : times){
             sum += time;
         }
-        return sum / times.size();
+        double average = sum / times.size();
+        String formattedTime = df.format(average);
+        return Double.parseDouble(formattedTime.replace(',', '.'));
     }
 
     public void getAverageTimes() {
         countAverageWaitingTimePerPhilosopher();
-        System.out.println("Average time for all philosophers (first fork): " + getAverageTime(averageWaitingTimePerPhilosopherOneForks));
-        System.out.println("Average time for all philosophers (both fork): " + getAverageTime(averageWaitingTimePerPhilosopherBothForks));
-        averageWaitingTimes.add(getAverageTime(averageWaitingTimePerPhilosopherOneForks));
+//        averageWaitingTimes.add(getAverageTime(averageWaitingTimePerPhilosopherOneForks));
         averageWaitingTimes.add(getAverageTime(averageWaitingTimePerPhilosopherBothForks));
         for (Philosopher philosopher : philosophers){
             eatingPerPhilosopher.add(philosopher.getTimerAndCounter().getEatingCounter());

@@ -17,6 +17,8 @@ public class TimeMonitor extends Thread{
         }
         for (Philosopher philosopher : philosophers){
             philosopher.should_running = 567;
+//            philosopher.interrupt();
         }
+        System.out.println("Philosophers killed");
     }
 }

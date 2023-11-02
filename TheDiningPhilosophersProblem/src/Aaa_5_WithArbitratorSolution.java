@@ -5,44 +5,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-class LockedFork extends Fork {
-    private int ID;
-    private ReentrantLock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
-
-    public LockedFork(int ID){
-        super(ID);
-    }
-
-    @Override
-    public boolean take(){
-        lock.lock();
-        try{
-            while (isTaken){
-                condition.await();
-            }
-            isTaken = true;
-            return true;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public void release(){
-        lock.lock();
-        try {
-            isTaken = false;
-            condition.signal();
-        } finally {
-            lock.unlock();
-        }
-    }
-}
-
 class ControllingArbitrator{
     private int n;
     private Semaphore eatingPhilosophers;
@@ -75,16 +37,20 @@ class ControlledPhilosopher extends Philosopher {
             try {
                 arbitrator.requestEat();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                break;
             }
             getBothForksTime = System.nanoTime();
-            takeRightFork();
-            takeLeftFork();
-            getTimerAndCounter().addBothForksTime(getBothForksTime-startWaiting);
-            getTimerAndCounter().addOneForksTime(getBothForksTime-startWaiting);
-            System.out.println("Jestem filozofem numer " + getID() + " i mam oba widelce");
-            System.out.println("Jestem filozofem numer " + getID() + " i jem");
-            getTimerAndCounter().philosopherAte();
+            synchronized (getRightFork()){
+                synchronized (getLeftFork()){
+                    takeRightFork();
+                    takeLeftFork();
+                    getTimerAndCounter().addBothForksTime(getBothForksTime-startWaiting);
+                    getTimerAndCounter().addOneForksTime(getBothForksTime-startWaiting);
+                    System.out.println("Jestem filozofem numer " + getID() + " i mam oba widelce");
+                    System.out.println("Jestem filozofem numer " + getID() + " i jem");
+                    getTimerAndCounter().philosopherAte();
+                }
+            }
             releaseLeftFork();
             releaseRightFork();
             arbitrator.doneEating();
@@ -94,14 +60,14 @@ class ControlledPhilosopher extends Philosopher {
 }
 
 
-public class WithArbitratorSolution {
-    public void runExperiments(int n){
-        List<LockedFork> forks = new ArrayList<>();
+public class Aaa_5_WithArbitratorSolution {
+    public void runExperiments(int n, int timer) {
+        List<Fork> forks = new ArrayList<>();
         List<Philosopher> philosophers = new ArrayList<>();
         CsvWriter csvWriter = new CsvWriter();
 
         for (int i = 0; i < n; i++) {
-            forks.add(new LockedFork(i));
+            forks.add(new Fork(i));
         }
         ControllingArbitrator arbitrator = new ControllingArbitrator(n);
         for (int i = 0; i < n; i++){
@@ -110,11 +76,18 @@ public class WithArbitratorSolution {
             philosophers.add(new ControlledPhilosopher(i, left, right, arbitrator));
             philosophers.get(i).start();
         }
-        TimeMonitor timeMonitor = new TimeMonitor(15000, philosophers);
+        TimeMonitor timeMonitor = new TimeMonitor(timer, philosophers);
         timeMonitor.start();
+
+        try {
+            timeMonitor.join();
+        } catch (InterruptedException e){
+        }
 
         for (Philosopher philosopher : philosophers) {
             try {
+                System.out.println(philosopher.getName() + "alive" + philosopher.isAlive());
+                System.out.println(philosopher.getName() + "deamon" + philosopher.isDaemon());
                 philosopher.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -122,15 +95,16 @@ public class WithArbitratorSolution {
         }
 
         ResultObliczacz obliczacz = new ResultObliczacz(philosophers);
-        obliczacz.getResult(csvWriter, "arbitrator_data.csv");
+//        obliczacz.getResult(csvWriter, "arbitrator_data.csv");
     }
 
     public static void main(String[] args) {
-        WithArbitratorSolution solution = new WithArbitratorSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 8, 10, 12);
-        for (Integer num : numOfPhilosophers){
-            solution.runExperiments(num);
-        }
+        Aaa_5_WithArbitratorSolution solution = new Aaa_5_WithArbitratorSolution();
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 14, 16);
+//        for (Integer num : numOfPhilosophers){
+//            solution.runExperiments(num, 1000);
+//        }
+        solution.runExperiments(15, 1000);
         System.exit(0);
     }
 }

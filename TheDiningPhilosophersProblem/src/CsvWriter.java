@@ -1,5 +1,4 @@
 import com.opencsv.CSVWriter;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class CsvWriter {
         boolean fileExists = new File(filePath).exists();
         if (!fileExists){
             try (CSVWriter writer = new CSVWriter(new FileWriter(filePath))) {
-                writer.writeNext(new String[] { "n", "wynik" });
+                writer.writeNext(new String[] { "\n" });
             } catch (IOException e) {
                 e.printStackTrace();
             }
