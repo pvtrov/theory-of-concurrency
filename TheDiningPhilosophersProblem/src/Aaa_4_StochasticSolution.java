@@ -68,8 +68,8 @@ public class Aaa_4_StochasticSolution {
         }
 
         for (int i = 0; i < n; i++){
-            Fork left = forks.get((i+1)%n);
-            Fork right = forks.get((i-1+5)%n);
+            Fork left = forks.get(i);
+            Fork right = forks.get(i == 0 ? forks.size() -1 : i - 1);
             philosophers.add(new StochasticPhilosopher(i, left, right));
             philosophers.get(i).start();
         }
@@ -92,7 +92,7 @@ public class Aaa_4_StochasticSolution {
 
     public static void main(String[] args) {
         Aaa_4_StochasticSolution solution = new Aaa_4_StochasticSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(20, 25);
+        List<Integer> numOfPhilosophers = Arrays.asList(20, 25, 30);
         for (Integer num : numOfPhilosophers){
             solution.runExperiments(num, 1000);
         }

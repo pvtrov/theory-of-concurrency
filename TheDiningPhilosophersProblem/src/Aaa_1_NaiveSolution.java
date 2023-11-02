@@ -36,8 +36,8 @@ public class Aaa_1_NaiveSolution {
             forks.add(new Fork(i));
         }
         for (int i = 0; i < n; i++){
-            Fork left = forks.get((i+1)%n);
-            Fork right = forks.get((i-1+5)%n);
+            Fork left = forks.get(i);
+            Fork right = forks.get(i == 0 ? forks.size() -1 : i - 1);
             philosophers.add(new NaivePhilosopher(i, left, right));
             philosophers.get(i).start();
         }

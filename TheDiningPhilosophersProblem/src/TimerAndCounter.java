@@ -3,6 +3,8 @@ import java.util.List;
 
 
 public class TimerAndCounter {
+    /* Class for handling counting and time measuring */
+
     private List<Double> waitingForOneForkTimes = new ArrayList<>();
     private List<Double> waitingForBothForksTimes = new ArrayList<>();
     private int eatingCounter = 0;

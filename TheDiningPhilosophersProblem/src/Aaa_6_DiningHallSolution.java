@@ -30,49 +30,49 @@ class DiningHallPhilosopher extends Philosopher {
 
     public void run(){
         startWaiting = System.nanoTime();
-            while(566 > should_running) {
-                if (Thread.currentThread().isInterrupted()) {
+        while(566 > should_running) {
+            if (Thread.currentThread().isInterrupted()) {
+                break;
+            }
+            if (arbitrator.requestEat()) {
+                try {
+                    arbitrator.diningSeats.acquire();
+                } catch (InterruptedException e) {
                     break;
                 }
-                if (arbitrator.requestEat()) {
-                    try {
-                        arbitrator.diningSeats.acquire();
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                    synchronized (getRightFork()) {
-                        takeRightFork();
-                        getFirstForkTime = System.nanoTime();
-                        getTimerAndCounter().addOneForksTime(getFirstForkTime - startWaiting);
-                        synchronized (getLeftFork()) {
-                            takeLeftFork();
-                            getBothForksTime = System.nanoTime();
-                            getTimerAndCounter().addBothForksTime(getBothForksTime - startWaiting);
-                            System.out.println("Jestem filozofem numer " + getID() + " i jem w jadalni");
-                            getTimerAndCounter().philosopherAte();
-                            releaseLeftFork();
-                            releaseRightFork();
-                        }
-                    }
-                    arbitrator.doneEating();
-                } else {
+                synchronized (getRightFork()) {
+                    takeRightFork();
+                    getFirstForkTime = System.nanoTime();
+                    getTimerAndCounter().addOneForksTime(getFirstForkTime - startWaiting);
                     synchronized (getLeftFork()) {
                         takeLeftFork();
-                        getFirstForkTime = System.nanoTime();
-                        getTimerAndCounter().addOneForksTime(getFirstForkTime - startWaiting);
-                        synchronized (getRightFork()) {
-                            takeRightFork();
-                            getBothForksTime = System.nanoTime();
-                            getTimerAndCounter().addBothForksTime(getBothForksTime - startWaiting);
-                            System.out.println("Jestem filozofem numer " + getID() + " i jem w korytarzu");
-                            getTimerAndCounter().philosopherAte();
-                            releaseLeftFork();
-                            releaseRightFork();
-                        }
+                        getBothForksTime = System.nanoTime();
+                        getTimerAndCounter().addBothForksTime(getBothForksTime - startWaiting);
+                        System.out.println("Jestem filozofem numer " + getID() + " i jem w jadalni");
+                        getTimerAndCounter().philosopherAte();
+                        releaseLeftFork();
+                        releaseRightFork();
                     }
                 }
-                startWaiting = System.nanoTime();
+                arbitrator.doneEating();
+            } else {
+                synchronized (getLeftFork()) {
+                    takeLeftFork();
+                    getFirstForkTime = System.nanoTime();
+                    getTimerAndCounter().addOneForksTime(getFirstForkTime - startWaiting);
+                    synchronized (getRightFork()) {
+                        takeRightFork();
+                        getBothForksTime = System.nanoTime();
+                        getTimerAndCounter().addBothForksTime(getBothForksTime - startWaiting);
+                        System.out.println("Jestem filozofem numer " + getID() + " i jem w korytarzu");
+                        getTimerAndCounter().philosopherAte();
+                        releaseLeftFork();
+                        releaseRightFork();
+                    }
+                }
             }
+            startWaiting = System.nanoTime();
+        }
     }
 }
 
@@ -87,8 +87,8 @@ public class Aaa_6_DiningHallSolution {
         }
         DiningHallArbitrator arbitrator = new DiningHallArbitrator(n);
         for (int i = 0; i < n; i++){
-            Fork left = forks.get((i+1)%n);
-            Fork right = forks.get((i-1+5)%n);
+            Fork left = forks.get(i);
+            Fork right = forks.get(i == 0 ? forks.size() -1 : i - 1);
             philosophers.add(new DiningHallPhilosopher(i, left, right, arbitrator));
             philosophers.get(i).start();
         }
@@ -109,11 +109,10 @@ public class Aaa_6_DiningHallSolution {
 
     public static void main(String[] args) {
         Aaa_6_DiningHallSolution solution = new Aaa_6_DiningHallSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 14);
-//        for (Integer num : numOfPhilosophers){
-//            solution.runExperiments(num, 1000);
-//        }
-        solution.runExperiments(25, 1000);
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25, 30);
+        for (Integer num : numOfPhilosophers){
+            solution.runExperiments(num, 1000);
+        }
         System.exit(0);
     }
 }

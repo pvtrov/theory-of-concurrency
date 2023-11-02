@@ -71,8 +71,8 @@ public class Aaa_5_WithArbitratorSolution {
         }
         ControllingArbitrator arbitrator = new ControllingArbitrator(n);
         for (int i = 0; i < n; i++){
-            Fork left = forks.get((i+1)%n);
-            Fork right = forks.get((i-1+5)%n);
+            Fork left = forks.get(i);
+            Fork right = forks.get(i == 0 ? forks.size() -1 : i - 1);
             philosophers.add(new ControlledPhilosopher(i, left, right, arbitrator));
             philosophers.get(i).start();
         }
@@ -86,8 +86,6 @@ public class Aaa_5_WithArbitratorSolution {
 
         for (Philosopher philosopher : philosophers) {
             try {
-                System.out.println(philosopher.getName() + "alive" + philosopher.isAlive());
-                System.out.println(philosopher.getName() + "deamon" + philosopher.isDaemon());
                 philosopher.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -95,16 +93,20 @@ public class Aaa_5_WithArbitratorSolution {
         }
 
         ResultObliczacz obliczacz = new ResultObliczacz(philosophers);
-//        obliczacz.getResult(csvWriter, "arbitrator_data.csv");
+        obliczacz.getResult(csvWriter, "arbitrator_data.csv");
     }
 
     public static void main(String[] args) {
         Aaa_5_WithArbitratorSolution solution = new Aaa_5_WithArbitratorSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 14, 16);
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25, 30);
 //        for (Integer num : numOfPhilosophers){
 //            solution.runExperiments(num, 1000);
 //        }
-        solution.runExperiments(15, 1000);
+//        solution.runExperiments(15, 1000);
+//        for(int x = 0 ; x < 100 ; x++){
+//            solution.runExperiments(x, 100);
+//        }
+        solution.runExperiments(100, 1000);
         System.exit(0);
     }
 }

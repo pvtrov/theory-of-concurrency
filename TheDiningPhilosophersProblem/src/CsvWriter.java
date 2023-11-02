@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvWriter {
+    /* Class for handling writing data to csv file */
+
     private static void write(List<List<? extends Number>> data, String filePath){
         try (CSVWriter writer = new CSVWriter(new FileWriter(filePath, true))) {
             for (List<? extends Number> row : data) {

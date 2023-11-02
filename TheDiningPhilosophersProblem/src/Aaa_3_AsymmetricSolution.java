@@ -58,8 +58,8 @@ public class Aaa_3_AsymmetricSolution {
             forks.add(new Fork(i));
         }
         for (int i = 0; i < n; i++){
-            Fork left = forks.get((i+1)%n);
-            Fork right = forks.get((i-1+5)%n);
+            Fork left = forks.get(i);
+            Fork right = forks.get(i == 0 ? forks.size() -1 : i - 1);
             philosophers.add(new AsymmetricPhilosopher(i, left, right));
             philosophers.get(i).start();
         }
@@ -80,7 +80,7 @@ public class Aaa_3_AsymmetricSolution {
 
     public static void main(String[] args) {
         Aaa_3_AsymmetricSolution solution = new Aaa_3_AsymmetricSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25);
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25, 30);
         for (Integer num : numOfPhilosophers){
             solution.runExperiments(num, 1000);
         }

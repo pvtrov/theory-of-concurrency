@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultObliczacz {
+    /* Class for handling result computing */
+
     private final List<Philosopher> philosophers;
     private List<Double> averageWaitingTimePerPhilosopherBothForks = new ArrayList<>();
     private List<Double> averageWaitingTimePerPhilosopherOneForks = new ArrayList<>();

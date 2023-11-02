@@ -1,6 +1,7 @@
 import java.util.List;
 
 public class TimeMonitor extends Thread{
+    /* Class for handling program killing */
     List<Philosopher> philosophers;
     int timer;
 
