@@ -31,9 +31,6 @@ class DiningHallPhilosopher extends Philosopher {
     public void run(){
         startWaiting = System.nanoTime();
         while(566 > should_running) {
-            if (Thread.currentThread().isInterrupted()) {
-                break;
-            }
             if (arbitrator.requestEat()) {
                 try {
                     arbitrator.diningSeats.acquire();
@@ -50,8 +47,6 @@ class DiningHallPhilosopher extends Philosopher {
                         getTimerAndCounter().addBothForksTime(getBothForksTime - startWaiting);
                         System.out.println("Jestem filozofem numer " + getID() + " i jem w jadalni");
                         getTimerAndCounter().philosopherAte();
-                        releaseLeftFork();
-                        releaseRightFork();
                     }
                 }
                 arbitrator.doneEating();
@@ -66,11 +61,11 @@ class DiningHallPhilosopher extends Philosopher {
                         getTimerAndCounter().addBothForksTime(getBothForksTime - startWaiting);
                         System.out.println("Jestem filozofem numer " + getID() + " i jem w korytarzu");
                         getTimerAndCounter().philosopherAte();
-                        releaseLeftFork();
-                        releaseRightFork();
                     }
                 }
             }
+            releaseRightFork();
+            releaseLeftFork();
             startWaiting = System.nanoTime();
         }
     }
@@ -109,9 +104,9 @@ public class Aaa_6_DiningHallSolution {
 
     public static void main(String[] args) {
         Aaa_6_DiningHallSolution solution = new Aaa_6_DiningHallSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25, 30);
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 30);
         for (Integer num : numOfPhilosophers){
-            solution.runExperiments(num, 1000);
+            solution.runExperiments(num, 3000);
         }
         System.exit(0);
     }

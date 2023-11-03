@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 class ControllingArbitrator{
     private int n;
@@ -39,20 +37,21 @@ class ControlledPhilosopher extends Philosopher {
             } catch (InterruptedException e) {
                 break;
             }
-            getBothForksTime = System.nanoTime();
             synchronized (getRightFork()){
+                getFirstForkTime = System.nanoTime();
+                getTimerAndCounter().addOneForksTime(getFirstForkTime - startWaiting);
                 synchronized (getLeftFork()){
+                    getBothForksTime = System.nanoTime();
                     takeRightFork();
                     takeLeftFork();
                     getTimerAndCounter().addBothForksTime(getBothForksTime-startWaiting);
-                    getTimerAndCounter().addOneForksTime(getBothForksTime-startWaiting);
                     System.out.println("Jestem filozofem numer " + getID() + " i mam oba widelce");
                     System.out.println("Jestem filozofem numer " + getID() + " i jem");
                     getTimerAndCounter().philosopherAte();
+                    releaseLeftFork();
                 }
+                releaseRightFork();
             }
-            releaseLeftFork();
-            releaseRightFork();
             arbitrator.doneEating();
             startWaiting = System.nanoTime();
         }
@@ -88,7 +87,6 @@ public class Aaa_5_WithArbitratorSolution {
             try {
                 philosopher.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
 
@@ -98,15 +96,10 @@ public class Aaa_5_WithArbitratorSolution {
 
     public static void main(String[] args) {
         Aaa_5_WithArbitratorSolution solution = new Aaa_5_WithArbitratorSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25, 30);
-//        for (Integer num : numOfPhilosophers){
-//            solution.runExperiments(num, 1000);
-//        }
-//        solution.runExperiments(15, 1000);
-//        for(int x = 0 ; x < 100 ; x++){
-//            solution.runExperiments(x, 100);
-//        }
-        solution.runExperiments(100, 1000);
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 30);
+        for (Integer num : numOfPhilosophers){
+            solution.runExperiments(num, 3000);
+        }
         System.exit(0);
     }
 }

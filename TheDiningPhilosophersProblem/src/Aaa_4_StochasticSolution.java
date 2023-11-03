@@ -13,9 +13,6 @@ class StochasticPhilosopher extends Philosopher {
     public void run(){
         startWaiting = System.nanoTime();
         while(566 > should_running){
-            if (Thread.currentThread().isInterrupted()) {
-                break;
-            }
             int coin = random.nextInt(2); // left -> 0, right -> 1
             if (coin == 0) {
                 synchronized (getLeftFork()){
@@ -81,7 +78,6 @@ public class Aaa_4_StochasticSolution {
             try {
                 philosopher.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
 
@@ -92,9 +88,9 @@ public class Aaa_4_StochasticSolution {
 
     public static void main(String[] args) {
         Aaa_4_StochasticSolution solution = new Aaa_4_StochasticSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(20, 25, 30);
+        List<Integer> numOfPhilosophers = Arrays.asList(20, 30);
         for (Integer num : numOfPhilosophers){
-            solution.runExperiments(num, 1000);
+            solution.runExperiments(num, 3000);
         }
         System.exit(0);
     }

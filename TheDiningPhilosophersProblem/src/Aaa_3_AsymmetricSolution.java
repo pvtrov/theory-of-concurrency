@@ -23,7 +23,9 @@ class AsymmetricPhilosopher extends Philosopher {
                         System.out.println("Jestem filozofem numer " + getID() + " i mam oba widelce");
                         System.out.println("Jestem filozofem numer " + getID() + " i jem");
                         getTimerAndCounter().philosopherAte();
+                        releaseLeftFork();
                     }
+                    releaseRightFork();
                 }
             } else {
                 synchronized (getLeftFork()){
@@ -38,11 +40,11 @@ class AsymmetricPhilosopher extends Philosopher {
                         System.out.println("Jestem filozofem numer " + getID() + " i mam oba widelce");
                         System.out.println("Jestem filozofem numer " + getID() + " i jem");
                         getTimerAndCounter().philosopherAte();
+                        releaseRightFork();
                     }
+                    releaseLeftFork();
                 }
             }
-            releaseLeftFork();
-            releaseRightFork();
             startWaiting = System.nanoTime();
             System.out.println("Jestem filozofem numer " + getID() + " i skonczylem jesc");
         }
@@ -70,7 +72,6 @@ public class Aaa_3_AsymmetricSolution {
             try {
                 philosopher.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
 
@@ -80,9 +81,9 @@ public class Aaa_3_AsymmetricSolution {
 
     public static void main(String[] args) {
         Aaa_3_AsymmetricSolution solution = new Aaa_3_AsymmetricSolution();
-        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 25, 30);
+        List<Integer> numOfPhilosophers = Arrays.asList(5, 10, 15, 20, 30);
         for (Integer num : numOfPhilosophers){
-            solution.runExperiments(num, 1000);
+            solution.runExperiments(num, 3000);
         }
         System.exit(0);
     }
