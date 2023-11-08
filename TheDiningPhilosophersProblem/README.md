@@ -1,4 +1,4 @@
-# The Dining Philosophers problem 
+# The Dinning Philosophers problem 
 
 This is one of the classic problems in concurrency theory. The basic formulation of the problem is as follows:
 
@@ -14,7 +14,7 @@ My solution includes six different approaches:
 * **Asymmetric Solution**
 * **Stochastic Solution**
 * **Solution With Arbiter**
-* **Dining-room Solution**
+* **Dinning-room Solution**
 
 For each of these solutions, I conducted experiments, measuring various average values. 
 The full report on these experiments is available in the Polish language [here].
