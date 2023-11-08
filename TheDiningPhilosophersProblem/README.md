@@ -11,10 +11,10 @@ This is one of the classic problems in concurrency theory. The basic formulation
 My solution includes six different approaches:
 * **Naive Solution** (with potential deadlock)
 * **Starvation-Prone Solution**
-* **AsymmetricSolution**
-* **StochasticSolution**
-* **SolutionWithArbiter**
-* **DiningRoomSolution**
+* **Asymmetric Solution**
+* **Stochastic Solution**
+* **Solution With Arbiter**
+* **Dining-room Solution**
 
 For each of these solutions, I conducted experiments, measuring various average values. 
 The full report on these experiments is available in the Polish language [here].
