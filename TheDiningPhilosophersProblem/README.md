@@ -17,4 +17,7 @@ My solution includes six different approaches:
 * **DiningRoomSolution**
 
 For each of these solutions, I conducted experiments, measuring various average values. 
-The full report on these experiments is available in the Polish language.
+The full report on these experiments is available in the Polish language [here].
+
+
+[here]: https://github.com/pvtrov/theory-of-concurrency/blob/main/TheDiningPhilosophersProblem/report01.pdf
