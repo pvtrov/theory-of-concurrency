@@ -16,6 +16,7 @@ My solution includes six different approaches:
 * **Solution With Arbiter**
 * **Dinning-room Solution**
 
+The whole project is written in Java programming language. 
 For each of these solutions, I conducted experiments, measuring various average values. 
 The full report on these experiments is available in the Polish language [here].
 
