@@ -121,7 +121,7 @@ def write_result_file(dependency_table, independency_table, foata):
         )
 
 
-def main(alphabet, word, transactions):
+def main(alphabet, word, transactions, exercise=1):
     """
     Executes the main program logic, involving the analysis of a given word using Diekert graph theory.
 
@@ -151,7 +151,7 @@ def main(alphabet, word, transactions):
     fnf = find_foata_normal_form(alphabet, graph, word)
     diekert_graph = DiekertGraph(word, independency_table)
     write_result_file(dependency_table, independency_table, fnf)
-    diekert_graph.draw_graph()
+    diekert_graph.draw_graph(save_path=f"diekert_graph{exercise}.png")
 
 
 if __name__ == "__main__":
@@ -174,10 +174,26 @@ if __name__ == "__main__":
         "(e) z := y - z",
         "(f) v := x + v",
     ]
+
+    A3 = {"a", "b", "c", "d", "e", "f"}
+    w3 = "acdcfbbe"
+    transactions3 = [
+        "(a) x := y + z",
+        "(b) y := y + w + x",
+        "(c) x := x + y + v",
+        "(d) w := v + z",
+        "(e) v := x + v + w",
+        "(f) z := y + z + v",
+    ]
+
     with open("result.txt", "w") as file:
         file.write("~~~~~ Exercise 1 ~~~~~\n")
-    main(alphabet=A, transactions=transactions, word=w)
+    main(alphabet=A, transactions=transactions, word=w, exercise=1)
 
     with open("result.txt", "a") as file:
         file.write("\n~~~~~ Exercise 2 ~~~~~\n")
-    main(alphabet=A2, transactions=transactions2, word=w2)
+    main(alphabet=A2, transactions=transactions2, word=w2, exercise=2)
+
+    with open("result.txt", "a") as file:
+        file.write("\n~~~~~ Exercise 3 ~~~~~\n")
+    main(alphabet=A3, transactions=transactions3, word=w3, exercise=3)

@@ -40,7 +40,7 @@ class DiekertGraph:
                         transitive_edges.add((i, k))
         return transitive_edges
 
-    def draw_graph(self):
+    def draw_graph(self, save_path=None):
         """Draws the graph."""
         pos = nx.spring_layout(self.graph, seed=42, k=0.5, iterations=50)
         labels = {i: letter for i, letter in enumerate(self.word)}
@@ -53,4 +53,8 @@ class DiekertGraph:
             arrowsize=20,
             node_color="orchid",
         )
+
+        if save_path:
+            plt.savefig(save_path, format="png")
+
         plt.show()
