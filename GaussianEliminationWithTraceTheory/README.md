@@ -1,4 +1,4 @@
-# Gauss elimination using Trace Theory
+# Gaussian elimination using Trace Theory
 
 ## Running theoretical part of the program
 To run the program, follow these steps:
